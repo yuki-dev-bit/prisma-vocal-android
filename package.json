@@ -1,0 +1,75 @@
+{
+  "name": "prisma-vocal-android",
+  "productName": "Prisma Vocal",
+  "version": "1.0.1",
+  "description": "Treinamento, análise e acompanhamento de voz para feminização e masculinização vocal — app Android (Capacitor), offline e com dados cifrados no aparelho.",
+  "author": {
+    "name": "yuki-dev-bit",
+    "email": "yuki-dev-bit@users.noreply.github.com",
+    "url": "https://github.com/yuki-dev-bit"
+  },
+  "homepage": "https://github.com/yuki-dev-bit/prisma-vocal-android",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yuki-dev-bit/prisma-vocal-android.git"
+  },
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "audio:test": "node scripts/make-test-audio.mjs",
+    "build": "npm run typecheck && npm run build:renderer",
+    "build:renderer": "vite build",
+    "dev:web": "vite --host 0.0.0.0 --port 5273 --strictPort",
+    "icons": "python3 scripts/generate_icons.py",
+    "mobile:assets": "cap copy android",
+    "mobile:open": "cap open android",
+    "mobile:run": "npm run mobile:sync && cap run android",
+    "mobile:sync": "npm run build:renderer && cap sync android",
+    "perf:hud": "npm run build:renderer && node scripts/perf-hud.mjs --throttle 4 --seconds 8",
+    "screenshots:mobile": "node scripts/screenshots-mobile.mjs",
+    "smoke:android": "node scripts/smoke-android.mjs",
+    "smoke:mic": "node scripts/smoke-mic.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"tests/**/*.ts\" \"scripts/*.mjs\" \"*.{ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"tests/**/*.ts\" \"scripts/*.mjs\" \"*.{ts,json,js}\"",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:mobile": "node scripts/check-mobile-layout.mjs",
+    "test:mobile:screens": "node scripts/check-mobile-layout.mjs --screens",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run build:renderer && npm run smoke:android",
+    "verify:mobile": "npm run build:renderer && npm run test:mobile && npm run smoke:mic && npm run smoke:android"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/share": "^8.0.3",
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^15.15.0",
+    "playwright": "^1.64.1",
+    "prettier": "^3.9.10",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}

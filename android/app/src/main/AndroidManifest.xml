@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+    <!-- Permissions -->
+
+    <!--
+      INTERNET é exigido pelo WebView que serve os arquivos do app em
+      https://localhost (não há nenhuma requisição para fora: a CSP do
+      index.html só permite 'self').
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+      Microfone: captura de voz (o único dado sensível do app).
+
+      As DUAS permissões abaixo são obrigatórias e andam juntas. O Capacitor
+      pede ambas ao sistema em BridgeWebChromeClient.onPermissionRequest()
+      quando a página chama getUserMedia(), e só libera a captura no WebView se
+      o mapa de resultados vier todo concedido:
+
+          for (permission : isGranted.entrySet()) if (!granted) granted = false;
+          if (granted) request.grant(...) else request.deny();
+
+      Uma permissão pedida e não declarada no manifesto volta como negada, o
+      que faz o getUserMedia falhar com NotAllowedError mesmo com o microfone
+      autorizado pelo usuário (sintoma: "permissão negada" com a permissão
+      ligada nas configurações do Android). MODIFY_AUDIO_SETTINGS é de nível
+      "normal" (concedida na instalação, sem diálogo ao usuário); ela não dá
+      acesso a áudio, apenas à configuração do caminho de captura.
+    -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Lembretes locais (Android 13+ pede autorização em tempo de execução). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+</manifest>
